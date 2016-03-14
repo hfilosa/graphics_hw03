@@ -82,6 +82,14 @@ void parse_file ( char * filename,
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     printf(":%s:\n",line);  
+    if (strcmp(line,"display") == 0)
+      display(s);
+    if (strcmp(line,"line") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      add_edge(pm,(double)line[0],(double)line[2],(double)line[4],(double)line[6],(double)line[8],(double)line[10]);
+    }
   }
 }
 

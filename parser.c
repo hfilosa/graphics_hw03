@@ -69,6 +69,11 @@ void parse_file ( char * filename,
                   struct matrix * pm,
                   screen s) {
 
+  color c;
+  c.red=MAX_COLOR;
+  c.blue=0;
+  c.green=0;
+
   FILE *f;
   char line[256];
   
@@ -82,13 +87,70 @@ void parse_file ( char * filename,
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     printf(":%s:\n",line);  
-    if (strcmp(line,"display") == 0)
-      display(s);
+    double x0,y0,z0,x1,y1,z1;
+    double sx,sy,sz;
+    double tx,ty,tz;
+    double theta;
     if (strcmp(line,"line") == 0){
       fgets(line,255, f);
       line[strlen(line)-1]='\0';
       printf(":%s:\n",line); 
-      add_edge(pm,(double)line[0],(double)line[2],(double)line[4],(double)line[6],(double)line[8],(double)line[10]);
+      sscanf(line,"%lf %lf %lf %lf %lf %lf",&x0,&y0,&z0,&x1,&y1,&z1);
+      printf("%f %f %f %f %f %f\n",x0,y0,z0,x1,y1,z1);
+      add_edge(pm,x0,y0,z0,x1,y1,z1);
+    }
+    if (strcmp(line,"ident") == 0)
+      ident(transform);
+    if (strcmp(line,"scale") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf %lf %lf",&sx,&sy,&sz);
+      struct matrix *scale = make_scale(sx,sy,sz);
+      matrix_mult(scale,transform);
+      free_matrix(scale);
+    }
+    if (strcmp(line,"translate") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf %lf %lf",&tx,&ty,&tz);
+      struct matrix *translate = make_translate(tx,ty,tz);
+      matrix_mult(translate,transform);
+      free_matrix(translate);
+    }
+    if (strcmp(line,"xrotate") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf",&theta);
+      struct matrix *rotX = make_rotX((theta/180.)*M_PI);
+      matrix_mult(rotX,transform);
+      free_matrix(rotX);
+    }
+    if (strcmp(line,"yrotate") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf",&theta);
+      struct matrix *rotY = make_rotY((theta/180.)*M_PI);
+      matrix_mult(rotY,transform);
+      free_matrix(rotY);
+    }
+    if (strcmp(line,"zrotate") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf",&theta);
+      struct matrix *rotZ = make_rotZ((theta/180.)*M_PI);
+      matrix_mult(rotZ,transform);
+      free_matrix(rotZ);
+    }
+    if (strcmp(line,"apply") == 0)
+      matrix_mult(transform,pm);
+    if (strcmp(line,"display") == 0){
+      draw_lines(pm,s,c);
+      display(s);
     }
   }
 }

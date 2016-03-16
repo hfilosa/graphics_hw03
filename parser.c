@@ -74,10 +74,16 @@ void parse_file ( char * filename,
   c.blue=0;
   c.green=0;
 
+  double step=1000;
+
   FILE *f;
   char line[256];
-  
-  clear_screen(s);
+
+  double x0,y0,z0,x1,y1,z1;
+  double cx,cy,radius;
+  double sx,sy,sz;
+  double tx,ty,tz;
+  double theta;
 
   if ( strcmp(filename, "stdin") == 0 ) 
     f = stdin;
@@ -87,10 +93,6 @@ void parse_file ( char * filename,
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     printf(":%s:\n",line);  
-    double x0,y0,z0,x1,y1,z1;
-    double sx,sy,sz;
-    double tx,ty,tz;
-    double theta;
     if (strcmp(line,"line") == 0){
       fgets(line,255, f);
       line[strlen(line)-1]='\0';
@@ -98,6 +100,14 @@ void parse_file ( char * filename,
       sscanf(line,"%lf %lf %lf %lf %lf %lf",&x0,&y0,&z0,&x1,&y1,&z1);
       printf("%f %f %f %f %f %f\n",x0,y0,z0,x1,y1,z1);
       add_edge(pm,x0,y0,z0,x1,y1,z1);
+    }
+    if (strcmp(line,"circle") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf %lf %lf",&cx,&cy,&radius);
+      printf("%f %f %f\n",cx,cy,radius);
+      add_circle(pm,cx,cy,radius,step);
     }
     if (strcmp(line,"ident") == 0)
       ident(transform);
@@ -149,8 +159,17 @@ void parse_file ( char * filename,
     if (strcmp(line,"apply") == 0)
       matrix_mult(transform,pm);
     if (strcmp(line,"display") == 0){
+      clear_screen(s);
       draw_lines(pm,s,c);
       display(s);
+    }
+    if (strcmp(line,"save") == 0){
+      clear_screen(s);
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      draw_lines(pm,s,c);
+      save_ppm(s,line);
     }
   }
 }

@@ -23,6 +23,15 @@
 void add_circle( struct matrix * points, 
 		 double cx, double cy, 
 		 double r, double step ) {
+  double t=0;
+  double x=cx+r*cos(t);
+  double y=cy+r*sin(t);
+  step=(2*M_PI)/step;
+  for (t;t<=2*M_PI;t+=step){
+    add_edge(points,x,y,0,cx+r*cos(t+step),cy+r*sin(t+step),0);
+    x=cx+r*cos(t);
+    y=cy+r*sin(t);
+  }
 }
 
 /*======== void add_curve() ==========
@@ -122,7 +131,7 @@ void draw_line(int x0, int y0, int x1, int y1, screen s, color c) {
   x = x0;
   y = y0;
   
-  //swap points so we're always draing left to right
+  //swap points so we're always drawing left to right
   if ( x0 > x1 ) {
     x = x1;
     y = y1;

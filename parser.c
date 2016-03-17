@@ -171,6 +171,8 @@ void parse_file ( char * filename,
       draw_lines(pm,s,c);
       save_ppm(s,line);
     }
+    if (strcmp(line,"quit") == 0)
+      exit(42); 
   }
 }
 

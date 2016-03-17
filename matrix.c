@@ -285,6 +285,7 @@ struct matrix * make_bezier() {
  m->m[2][1] = 3;
  m->m[2][2] = 0;
  m->m[3][0] = 1;
+ m->m[3][3] = 0;
  return m;
 }
 
@@ -296,6 +297,20 @@ struct matrix * make_bezier() {
   the coefiecients for a hermite curve
   ====================*/
 struct matrix * make_hermite() {
+  struct matrix * m = new_matrix(4, 4);
+  ident(m);
+  m->m[0][0] = 2;
+  m->m[0][1] = -2;
+  m->m[0][2] = 1;
+  m->m[0][3] = 1;
+  m->m[1][0] = -3;
+  m->m[1][1] = 3;
+  m->m[1][2] = -2;
+  m->m[1][3] = 1;
+  m->m[2][2] = 0;
+  m->m[3][0] = 1;
+  m->m[3][3] = 0;
+  return m;
 }
 
 /*======== struct matrix * generate_curve_coefs() ==========
@@ -311,8 +326,22 @@ struct matrix * make_hermite() {
   by p1, p2, p3 and p4.
   
   Type determines whether the curve is bezier or hermite
+  Type 1 = Bezier. Type 2 = Hermite
   ====================*/
 struct matrix * generate_curve_coefs( double p1, double p2, 
 				      double p3, double p4, int type) {
+  struct matrix *temp;
+  if (type == 1)
+    temp=make_bezier();
+  if (type == 2)
+    temp=make_hermite();
+  struct matrix *coef=new_matrix(4,1);
+  coef->m[0][0]=p1;
+  coef->m[1][0]=p2;
+  coef->m[2][0]=p3;
+  coef->m[3][0]=p4;
+  matrix_mult(temp,coef);
+  free_matrix(temp);
+  return coef;
 }
 

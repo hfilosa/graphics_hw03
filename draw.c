@@ -61,6 +61,17 @@ void add_curve( struct matrix *points,
 		double x2, double y2, 
 		double x3, double y3, 
 		double step, int type ) {
+  struct matrix *x_coef=generate_curve_coefs(x0,x1,x2,x3,type);
+  struct matrix *y_coef=generate_curve_coefs(y0,y1,y2,y3,type);
+  double t=0;
+  step=1/step;
+  for (t;t<=1;t+=step){
+    x1=t*( t*(x_coef->m[0][0]*t + x_coef->m[1][0]) +x_coef[2][0])+x_coef[3][0];
+    y1=t*( t*(y_coef->m[0][0]*t + y_coef->m[1][0]) +y_coef[2][0])+y_coef[3][0];
+    add_edge(pm,x0,y0,0,x1,y1,0);
+    x0=x1;
+    y0=y1;
+  }
 }
 
 /*======== void add_point() ==========

@@ -52,6 +52,8 @@ Adds the curve bounded by the 4 points passsed as parameters
 of type specified in type (see matrix.h for curve type constants)
 to the matrix points
 
+Type 1 = Bezier. Type 2 = Hermite
+
 03/16/12 15:24:25
 jdyrlandweaver
 ====================*/
@@ -66,9 +68,9 @@ void add_curve( struct matrix *points,
   double t=0;
   step=1/step;
   for (t;t<=1;t+=step){
-    x1=t*( t*(x_coef->m[0][0]*t + x_coef->m[1][0]) +x_coef[2][0])+x_coef[3][0];
-    y1=t*( t*(y_coef->m[0][0]*t + y_coef->m[1][0]) +y_coef[2][0])+y_coef[3][0];
-    add_edge(pm,x0,y0,0,x1,y1,0);
+    x1=t*( t*(x_coef->m[0][0]*t + x_coef->m[1][0]) +x_coef->m[2][0])+x_coef->m[3][0];
+    y1=t*( t*(y_coef->m[0][0]*t + y_coef->m[1][0]) +y_coef->m[2][0])+y_coef->m[3][0];
+    add_edge(points,x0,y0,0,x1,y1,0);
     x0=x1;
     y0=y1;
   }

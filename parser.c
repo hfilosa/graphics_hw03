@@ -74,13 +74,14 @@ void parse_file ( char * filename,
   c.blue=0;
   c.green=0;
 
-  double step=1000;
+  double step=10000;
 
   FILE *f;
   char line[256];
 
   double x0,y0,z0,x1,y1,z1;
   double cx,cy,radius;
+  double x2,y2,x3,y3;
   double sx,sy,sz;
   double tx,ty,tz;
   double theta;
@@ -108,6 +109,22 @@ void parse_file ( char * filename,
       sscanf(line,"%lf %lf %lf",&cx,&cy,&radius);
       printf("%f %f %f\n",cx,cy,radius);
       add_circle(pm,cx,cy,radius,step);
+    }
+    if (strcmp(line,"hermite") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf %lf %lf %lf %lf %lf %lf %lf",&x0,&y0,&x1,&y1,&x2,&y2,&x3,&y3);
+      printf("%f %f %f %f %f %f %f %f\n",x0,y0,x1,y1,x2,y2,x3,y3);
+      add_curve(pm,x0,y0,x1,y1,x2,y2,x3,y3,step,2);
+    }
+    if (strcmp(line,"bezier") == 0){
+      fgets(line,255, f);
+      line[strlen(line)-1]='\0';
+      printf(":%s:\n",line); 
+      sscanf(line,"%lf %lf %lf %lf %lf %lf %lf %lf",&x0,&y0,&x1,&y1,&x2,&y2,&x3,&y3);
+      printf("%f %f %f %f %f %f %f %f\n",x0,y0,x1,y1,x2,y2,x3,y3);
+      add_curve(pm,x0,y0,x1,y1,x2,y2,x3,y3,step,1);
     }
     if (strcmp(line,"ident") == 0)
       ident(transform);

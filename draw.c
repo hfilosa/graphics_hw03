@@ -70,18 +70,20 @@ void add_curve( struct matrix *points,
     y_coef=generate_curve_coefs(y0,y1,y2,y3,type);
   }
   if (type == 2){
-    x_coef=generate_curve_coefs(x0,x1-x0,x3,x2-x3,type);
-    y_coef=generate_curve_coefs(y0,y1-y0,y3,y2-y3,type);
+    x_coef=generate_curve_coefs(x0,x2,x1-x0,x2-x3,type);
+    y_coef=generate_curve_coefs(y0,y2,y1-y0,y2-y3,type);
   }
   double t=0;
   step=1/step;
   for (t;t<=1;t+=step){
-    x1=t*( t*(x_coef->m[0][0]*t + x_coef->m[1][0]) +x_coef->m[2][0])+x_coef->m[3][0];
-    y1=t*( t*(y_coef->m[0][0]*t + y_coef->m[1][0]) +y_coef->m[2][0])+y_coef->m[3][0];
+    x1=t*( t*(t*x_coef->m[0][0] + x_coef->m[1][0]) +x_coef->m[2][0])+x_coef->m[3][0];
+    y1=t*( t*(t*y_coef->m[0][0] + y_coef->m[1][0]) +y_coef->m[2][0])+y_coef->m[3][0];
     add_edge(points,x0,y0,0,x1,y1,0);
     x0=x1;
     y0=y1;
   }
+  free_matrix(x_coef);
+  free_matrix(y_coef);
 }
 
 /*======== void add_point() ==========

@@ -107,7 +107,6 @@ void parse_file ( char * filename,
       line[strlen(line)-1]='\0';
       printf(":%s:\n",line); 
       sscanf(line,"%lf %lf %lf",&cx,&cy,&radius);
-      printf("%f %f %f\n",cx,cy,radius);
       add_circle(pm,cx,cy,radius,step);
     }
     if (strcmp(line,"hermite") == 0){
@@ -115,7 +114,6 @@ void parse_file ( char * filename,
       line[strlen(line)-1]='\0';
       printf(":%s:\n",line); 
       sscanf(line,"%lf %lf %lf %lf %lf %lf %lf %lf",&x0,&y0,&x1,&y1,&x2,&y2,&x3,&y3);
-      printf("%f %f %f %f %f %f %f %f\n",x0,y0,x1,y1,x2,y2,x3,y3);
       add_curve(pm,x0,y0,x1,y1,x2,y2,x3,y3,step,2);
     }
     if (strcmp(line,"bezier") == 0){
@@ -123,7 +121,6 @@ void parse_file ( char * filename,
       line[strlen(line)-1]='\0';
       printf(":%s:\n",line); 
       sscanf(line,"%lf %lf %lf %lf %lf %lf %lf %lf",&x0,&y0,&x1,&y1,&x2,&y2,&x3,&y3);
-      printf("%f %f %f %f %f %f %f %f\n",x0,y0,x1,y1,x2,y2,x3,y3);
       add_curve(pm,x0,y0,x1,y1,x2,y2,x3,y3,step,1);
     }
     if (strcmp(line,"ident") == 0)

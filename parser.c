@@ -183,7 +183,7 @@ void parse_file ( char * filename,
       line[strlen(line)-1]='\0';
       printf(":%s:\n",line); 
       draw_lines(pm,s,c);
-      save_ppm(s,line);
+      save_extension(s,line);
     }
     if (strcmp(line,"quit") == 0)
       exit(42); 

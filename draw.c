@@ -70,8 +70,8 @@ void add_curve( struct matrix *points,
     y_coef=generate_curve_coefs(y0,y1,y2,y3,type);
   }
   if (type == 2){
-    x_coef=generate_curve_coefs(x0,x2,x1-x0,x2-x3,type);
-    y_coef=generate_curve_coefs(y0,y2,y1-y0,y2-y3,type);
+    x_coef=generate_curve_coefs(x0,x2,x1-x0,x3-x2,type);
+    y_coef=generate_curve_coefs(y0,y2,y1-y0,y3-y2,type);
   }
   double t=0;
   step=1/step;

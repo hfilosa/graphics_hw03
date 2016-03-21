@@ -29,6 +29,13 @@ circle
 200 290 10
 
 display
+yrotate
+60
+display
+xrotate
+60
+
+display
 save
 clippy.png
 quit
